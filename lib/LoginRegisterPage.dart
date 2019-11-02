@@ -4,14 +4,37 @@ class LoginRegisterPages extends StatefulWidget{
   @override 
   _LoginRegisterState createState()=> _LoginRegisterState();
 }
+enum FormType{
+  login,
+  register,
+}
 class _LoginRegisterState extends State<LoginRegisterPages>
 {
+  final formKey =new GlobalKey<FormState>();
+  FormType _formType = FormType.login;
+  String _email = "";
+  String _password="";
   //methods
-  void valicateAndSave(){
-
+  bool valicateAndSave(){
+    final form =formKey.currentState;
+    if(form.validate()){
+      form.save();
+      return true;
+    }else{
+      return false;
+    }
   }
   void moveToRegister(){
-
+      formKey.currentState.reset();
+      setState(() {
+        _formType = FormType.register;
+      });
+  }
+    void moveToLogin(){
+      formKey.currentState.reset();
+      setState(() {
+        _formType = FormType.login;
+      });
   }
   @override 
   Widget build (BuildContext context){
@@ -27,6 +50,7 @@ class _LoginRegisterState extends State<LoginRegisterPages>
            margin: EdgeInsets.all(15.0),
         //  decoration: new BoxDecoration(color: Colors.pinkAccent[50]),
            child:  new Form(
+             key: formKey,
                  child:  new Column(
               
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,10 +65,15 @@ class _LoginRegisterState extends State<LoginRegisterPages>
       SizedBox(height: 10.0,),
       logo(),
       SizedBox(height: 20.0,),
-      new TextField(
-      
+      new TextFormField( 
+         validator:(value){
+            return value.isEmpty ? 'Email is required.' : null;
+         },   
+         onSaved:(value){
+           return _email = value;
+         },
         decoration: InputDecoration(
-        //  border: OutlineInputBorder(),
+          //  border: OutlineInputBorder(),
           filled: true,
           fillColor: Color(0xFFF2F2F2),
           border: OutlineInputBorder(),
@@ -56,8 +85,13 @@ class _LoginRegisterState extends State<LoginRegisterPages>
       ),
      
       SizedBox(height: 15.0,),
-      new TextField(
-        
+      new TextFormField(
+         validator:(value){
+            return value.isEmpty ? 'Password is required.' : null;
+         },   
+         onSaved:(value){
+           return _password = value;
+         },
         obscureText: true,
         decoration: InputDecoration(
           filled: true,
@@ -85,29 +119,49 @@ class _LoginRegisterState extends State<LoginRegisterPages>
       ),
     );
   }
-   List<Widget> createButton(){
-    return[
-      new  SizedBox(
-  width: 200, // specific value
-  height: 50,
-  child: RaisedButton(
-        shape: RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(18.0),
-        side: BorderSide(color: Colors.green[900])
-),
-        child:  new Text("Login", style: new TextStyle(fontSize: 20.0)),
-        textColor: Colors.white,
-        color: Colors.green[300],
-        onPressed: valicateAndSave,
-      ),
-),
-      new FlatButton(
-        child: new Text("Not have an Account? Create Account??", style:  new TextStyle(fontSize:14.0 ),),
-        // textColor: Colors.white,
-      //  color: Colors.pink,
-        onPressed: moveToRegister,
-      ),
-     
-    ];
-  }
+  List<Widget> createButton(){
+     if(_formType== FormType.login){
+        return[
+          new  SizedBox(
+          width: 200, // specific value
+          height: 50,
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(18.0),
+            side: BorderSide(color: Colors.lightGreenAccent)
+            ),
+            child:  new Text("Login", style: new TextStyle(fontSize: 20.0)),
+            textColor: Colors.white,
+            color: Colors.green[300],
+            onPressed: valicateAndSave,
+          ),
+          ),
+          new FlatButton(
+            child: new Text("Not have an Account? Create Account??", style:  new TextStyle(fontSize:14.0 ),),
+            onPressed: moveToRegister,
+          ),   
+        ];
+     }else{
+        return[
+          new  SizedBox(
+            width: 200, // specific value
+            height: 50,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.green[900])
+              ),
+              child:  new Text("Create Account", style: new TextStyle(fontSize: 20.0)),
+              textColor: Colors.white,
+              color: Colors.green[300],
+              onPressed: valicateAndSave,
+            ),
+          ),
+          new FlatButton(
+            child: new Text("Already have a Account?? Login", style:  new TextStyle(fontSize:14.0 ),),
+            onPressed: moveToLogin,
+          ),    
+        ];
+      }
+   }
 }
