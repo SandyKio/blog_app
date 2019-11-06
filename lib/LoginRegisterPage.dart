@@ -1,4 +1,6 @@
 
+import 'package:blog_app/DialogBox.dart';
+import 'DialogBox.dart';
 import 'Authentication.dart';
 import 'package:blog_app/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ enum FormType{
 }
 class _LoginRegisterState extends State<LoginRegisterPages>
 {
+  DialogBox dialogBox=new DialogBox();
   final formKey =new GlobalKey<FormState>();
   FormType _formType = FormType.login;
   String _email = "";
@@ -63,9 +66,11 @@ class _LoginRegisterState extends State<LoginRegisterPages>
       try{
         if(_formType==FormType.login){
           String userId= await widget.auth.SignIn(_email, _password);
+            dialogBox.information(context, "Congratulations","Login....");
           print('Login userId ='+userId);
           widget.onSignedIn();// SignIn successful, return to HomePage
         }else{
+          dialogBox.information(context, "Congratulations","Your account has been creater successfully..");
            String userId= await widget.auth.SignUp(_email, _password);
           print('Register userId ='+userId);
           moveToLogin();//  Registration successful, return to the login page
@@ -73,6 +78,7 @@ class _LoginRegisterState extends State<LoginRegisterPages>
         }
        
       }catch(e){
+        dialogBox.information(context, "Error= ", e.toString());
         print("Error= " +e.toString());
       }
     }
