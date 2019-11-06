@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "182794649147",
+    "firebase_url": "https://presschool-73689.firebaseio.com",
+    "project_id": "presschool-73689",
+    "storage_bucket": "presschool-73689.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182794649147:android:7ce8b8de3c153940c2a61e",
+        "android_client_info": {
+          "package_name": "com.example.blog_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182794649147-034ps6hhe0pqac3v52h4uh50fob4t9uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfZRDqZGm6wWCP_OnNWPOMtAsKmbq1a9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182794649147-034ps6hhe0pqac3v52h4uh50fob4t9uc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

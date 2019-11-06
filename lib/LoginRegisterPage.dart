@@ -1,8 +1,18 @@
-import 'package:flutter/material.dart';
 
+import 'Authentication.dart';
+import 'package:blog_app/HomePage.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 class LoginRegisterPages extends StatefulWidget{
+  LoginRegisterPages({
+    this.auth,
+    this.onSignedIn,
+  });
+    final AuthImplementation auth;
+    final VoidCallback onSignedIn;
   @override 
   _LoginRegisterState createState()=> _LoginRegisterState();
+
 }
 enum FormType{
   login,
@@ -14,28 +24,6 @@ class _LoginRegisterState extends State<LoginRegisterPages>
   FormType _formType = FormType.login;
   String _email = "";
   String _password="";
-  //methods
-  bool valicateAndSave(){
-    final form =formKey.currentState;
-    if(form.validate()){
-      form.save();
-      return true;
-    }else{
-      return false;
-    }
-  }
-  void moveToRegister(){
-      formKey.currentState.reset();
-      setState(() {
-        _formType = FormType.register;
-      });
-  }
-    void moveToLogin(){
-      formKey.currentState.reset();
-      setState(() {
-        _formType = FormType.login;
-      });
-  }
   @override 
   Widget build (BuildContext context){
       return new Scaffold(
@@ -60,12 +48,55 @@ class _LoginRegisterState extends State<LoginRegisterPages>
          ),
       );
   }
-  List<Widget> createInputs(){
+  //methods
+  bool valicateAndSave(){
+    final form =formKey.currentState;
+    if(form.validate()){
+      form.save();
+      return true;
+    }else{
+      return false;
+    }
+  }
+  void  validateAndSubmit() async {
+    if(valicateAndSave()){
+      try{
+        if(_formType==FormType.login){
+          String userId= await widget.auth.SignIn(_email, _password);
+          print('Login userId ='+userId);
+          widget.onSignedIn();// SignIn successful, return to HomePage
+        }else{
+           String userId= await widget.auth.SignUp(_email, _password);
+          print('Register userId ='+userId);
+          moveToLogin();//  Registration successful, return to the login page
+
+        }
+       
+      }catch(e){
+        print("Error= " +e.toString());
+      }
+    }
+  }
+  void moveToRegister(){ // Move to SignUp
+      formKey.currentState.reset();
+      setState(() {
+        _formType = FormType.register;
+      });
+  }
+    void moveToLogin(){ //Move to SignIn
+      formKey.currentState.reset();
+      setState(() {
+        _formType = FormType.login;
+      });
+  }
+  
+  
+  List<Widget> createInputs(){ // Input Email & Password
     return[
       SizedBox(height: 10.0,),
       logo(),
       SizedBox(height: 20.0,),
-      new TextFormField( 
+      new TextFormField(  // UI input email
          validator:(value){
             return value.isEmpty ? 'Email is required.' : null;
          },   
@@ -85,7 +116,7 @@ class _LoginRegisterState extends State<LoginRegisterPages>
       ),
      
       SizedBox(height: 15.0,),
-      new TextFormField(
+      new TextFormField( // UI input password
          validator:(value){
             return value.isEmpty ? 'Password is required.' : null;
          },   
@@ -108,7 +139,7 @@ class _LoginRegisterState extends State<LoginRegisterPages>
 
     ];
   }
-  Widget logo()
+  Widget logo() // logo
   {
     return new Hero(
       tag: 'hero',
@@ -133,7 +164,7 @@ class _LoginRegisterState extends State<LoginRegisterPages>
             child:  new Text("Login", style: new TextStyle(fontSize: 20.0)),
             textColor: Colors.white,
             color: Colors.green[300],
-            onPressed: valicateAndSave,
+            onPressed: validateAndSubmit ,
           ),
           ),
           new FlatButton(
@@ -154,7 +185,7 @@ class _LoginRegisterState extends State<LoginRegisterPages>
               child:  new Text("Create Account", style: new TextStyle(fontSize: 20.0)),
               textColor: Colors.white,
               color: Colors.green[300],
-              onPressed: valicateAndSave,
+              onPressed: validateAndSubmit,
             ),
           ),
           new FlatButton(
