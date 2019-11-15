@@ -24,13 +24,13 @@ class _HomePageState extends State<HomePage>
   void initState(){
     super.initState();
     DatabaseReference postsRef=FirebaseDatabase.instance.reference().child("Posts");
-    postsRef.once().then((DataSnapshoot snap){
+    postsRef.once().then((DataSnapshot snap){
       var KEYS=snap.value.keys;
       var DATA= snap.value;
       postList.clear();
       for(var individualKey in KEYS)
       {
-        Posts posts: new Posts
+        Posts posts = new Posts
         (
           DATA[individualKey]['image'],
           DATA[individualKey]['description'],
@@ -144,4 +144,3 @@ class _HomePageState extends State<HomePage>
     );
   }
 }
-
