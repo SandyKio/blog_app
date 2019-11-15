@@ -55,6 +55,9 @@ class _HomePageState extends State<HomePage>
       print(e.toString());
     }
   }
+  void like(){
+
+  }
   @override 
   Widget build(BuildContext context){
     return new Scaffold(
@@ -138,6 +141,36 @@ class _HomePageState extends State<HomePage>
               style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),
+             SizedBox(height: 10.0,),
+              new Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: <Widget>[
+              new FlatButton(
+              
+              highlightColor: Colors.pink,
+              child: Row( // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.favorite,color: Colors.pink,),
+                    Text("Like", style:  new TextStyle(fontSize:14.0 ),),
+                  ],
+                ),
+              onPressed:null,
+               ),
+               new FlatButton(
+              
+  
+              child: Row( // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.mode_comment,color: Colors.black,),
+                    Text("Comments", style:  new TextStyle(fontSize:14.0 ),),
+                  ],
+                ),
+              onPressed:null,
+               ),
+           ],
+                  
+              ),
+            
           ],
         ),
       )
